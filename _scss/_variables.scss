@@ -20,6 +20,9 @@ $border: #ccc;
 // Fonts
 $sans-font: "Raleway", sans-serif;
 $serif-font: "Merriweather", serif;
+$code-font: Menlo, Monaco, "Courier New", monospace;
+
+$base-font-size: .8rem;
 
 // Mobile breakpoints
 @mixin mobile {

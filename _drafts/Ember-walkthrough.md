@@ -3,13 +3,12 @@ layout: post
 title: Ember Walkthrough
 ---
 
-We are using ember-cli.
-
-Make the first route:
+## Creating a Route ##
+We are using ember-cli. Make the first route:
 
     $ ember generate route nodes
 
-This makes `app/routes/nodes.js` and a unit test also. Add a hook for the model data:
+This creates a route file at `app/routes/nodes.js` plus a unit test. Lets open our route file and add a `model` hook. This tells Ember what data should be fetched when this route is active.
 
 
 ```javascript
@@ -20,22 +19,29 @@ export default Ember.Route.extend({
 });
 ```
 
-You can also return JSON directly from a URL:
+The above uses Ember's data store. The data store has an async API that returns a promise, which the route knows what to do with. You can also return JSON directly:
 
 ```javascript
 model: function() {
-    return ic.ajax({
-        url: 'https://example.com/api/nodes',
-        type: 'get'
-    });
+    return [
+      { id: 1, name: 'test_model' },
+      { id: 2, name: 'test_model_2' }
+    ];
 }
 ```
 
-But the data store is so cool we want to use it instead.
+### Mock REST Endpoints ###
+Since we are using the data store, we need some data to work with while developing. Use Ember CLI to create a mock server:
 
-* Get some test data in there: `ember g http-mock nodes`. This creates an Express server with an `api/nodes` endpoint. It's easy to paste JSON into the server file.
+    $ ember g http-mock nodes
 
-* Tell the data store where to find the data. `ember g adapter application`.The `namespace` property is prepended to the url used to fetch out models models:
+This creates an Express server with an `api/nodes` endpoint. You can paste mock JSON into the server file, `server/mocks/nodes.js`.
+
+Now when we visit `0.0.0.0:4200/nodes`... it don't work. We created a server, but you have to tell the data store where to find the data. At the bottom of the mock file, you will see `app.use('/api/nodes', nodesRouter);`. So our endpoint is actually `/api/nodes`, and we need to tell the data store about this. Create an adapter:
+
+    $ ember g adapter application
+
+This will extend the stock REST adapter, and we can override the `namespace` property, which is a string prepended to the URLs used to fetch our models. The `adapters/application.js` file should look like this:
 
 ```javascript
 import DS from 'ember-data';
@@ -45,7 +51,7 @@ export default DS.RESTAdapter.extend({
 });
 ```
 
-* Display data via Handlebars template. In `templates/nodes.hbs`, do something like:
+Display data via Handlebars template. In `templates/nodes.hbs`, do something like:
 
 ```
 {% raw %}
@@ -55,23 +61,23 @@ export default DS.RESTAdapter.extend({
 {% endraw %}
 ```
 
-The route is automatically resolved to this template because it has the same name as the route.
+The route automatically renders this template because they share the same name. Nested routes correspond to directory structure. So if you have a ensted route like `/nodes/favorites`, it would resolve to a template at `templates/nodes/favorites.hbs`.
 
 
-## Render multiple templates in one route ##
-This is good so far, but we want to have an index route that shows our nodes data and also our field models.
+## Show Mutliple Templates in One Route ##
+Now we can see some data. But we want to have a route that shows our node models and also our field models.
 
-* Make a template for the index route. `templates/index.js`:
+* Make a template for the index route, `templates/index.js`:
 
-```html
-{% raw %}
-<div>
-    {{outlet nodes}}
-    {{outlet fields}}
-    {{outlet}}
-</div>
-{% endraw %}
-```
+    ```html
+    {% raw %}
+    <div>
+        {{outlet nodes}}
+        {{outlet fields}}
+        {{outlet}}
+    </div>
+    {% endraw %}
+    ```
 
 This lets us render other templates inside our index template. Naming the outlets lets us specify them in the route object.
 
@@ -82,11 +88,11 @@ This lets us render other templates inside our index template. Naming the outlet
 import Ember from 'ember';
 export default Ember.Route.extend({
   setupController: function(controller) {
-  this.generateController('nodes');
-      this.controllerFor('nodes').set('model', this.store.find('node'));
+    this.generateController('nodes');
+    this.controllerFor('nodes').set('model', this.store.find('node'));
 
-      this.generateController('fields');
-      this.controllerFor('fields').set('model', this.store.find('field'));
+    this.generateController('fields');
+    this.controllerFor('fields').set('model', this.store.find('field'));
   },
   renderTemplate: function (controller, model) {
       // index template
@@ -105,11 +111,11 @@ export default Ember.Route.extend({
 });
 ```
 
-Now Ember will look for a `nodes` and a `fields` template and render them inside the index template. We need to call `Route.generateController` and set the `model` property on the controller since we are not using a naming convention that tells Ember which models and templates to use. The `renderTemplate` hook lets us use other templates. We don't need to make the controller files for the node or field models--Ember will auto generate them.
+Now Ember will look for a `nodes` and a `fields` template and render them inside the index template. We need to call `Route.generateController` and set the `model` property on the controller since we are not using a naming convention that tells Ember which models and templates to use. The `renderTemplate` hook lets us use other templates. We don't need to make the controller files for the node or field models---Ember will auto generate them.
 
 
 ## Show a list of models ##
-This is something we are doing over and over again. This is the heart of front-end apps--showing people lists of things. Our two collection templates have the same code in them, how can we factor out the redundancy?
+This is something we are doing over and over again. This is the heart of front-end apps---showing people lists of things. Our two collection templates have the same code in them, how can we factor out the redundancy?
 
 Use Ember components:
 
@@ -228,7 +234,7 @@ this.resource('index', {path: '/'}, function() {
 
 When we navigate to `/node/1`, the `node` template will be rendered with the model with id 1, and appended to `{{outlet}}` in `index.hbs`. All the other page content in `index.hbs` will remain in place.
 
-In `nodes.hbs`, we need to link to this route:
+In `nodes.hbs`, lets create a link to the route we just made:
 
 ```html
 {% raw %}
@@ -242,7 +248,7 @@ In `nodes.hbs`, we need to link to this route:
 {% endraw %}
 ```
 
-`{%raw%}{{link-to}}{%endraw%}` takes the name of a route and a model.
+The parameters in `{%raw%}{{link-to}}{%endraw%}` are the name of a route---`'node'`---and a model instance.
 
 
 ## Relationships again ##

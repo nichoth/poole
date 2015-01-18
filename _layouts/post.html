@@ -3,10 +3,17 @@ layout: default
 ---
 
 <article class="post">
-  <h1 class="post-title">{{ page.title }}</h1>
-  <time datetime="{{ page.date | date_to_xmlschema }}" class="page-date">{{ page.date | date_to_string }}</time>
+  <header class="post-head">
+    <h1 class="post-title">{{ page.title }}</h1>
+    <div class="header-aside">
+      <time datetime="{{ page.date | date_to_xmlschema }}" class="post-date">{{ page.date | date: "%B %e, %Y" }}</time>
+      <!-- &#8226; --> <small class="tagline">It's already obsolete.</small>
+    </div>
+  </header>
+  <hr>
   {{ content }}
 </article>
+
 
 <aside class="related">
   <h2>Related Posts</h2>
