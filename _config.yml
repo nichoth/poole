@@ -21,11 +21,11 @@ url:              http://getpoole.com
 paginate:         1
 baseurl:          /
 author:
-  name:           Mark Otto
-  url:            https://twitter.com/mdo
+  name:           Nick
+  url:            http://nichoth.github.io/
   email:          markdotto@gmail.com
 
 # Custom vars
 version:          1.0.0
 github:
-  repo:           https://github.com/poole/poole
+  repo:           https://github.com/nichoth/poole
