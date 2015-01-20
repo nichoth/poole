@@ -7,7 +7,7 @@ markdown: redcarpet
 highlighter: pygments
 
 redcarpet:
-  extensions: [smart]
+  extensions: [smart, with_toc_data]
 
 # Set the Sass partials directory, as we're using @imports
 sass:
