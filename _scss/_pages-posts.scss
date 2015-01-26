@@ -13,10 +13,13 @@
  Blog post or page title
  *****************************/
 .post-head {
-  margin-bottom: 1em;
+  margin-bottom: 6em;
   .header-aside {
     @extend %clearfix;
     color: $gray;
+  }
+  hr {
+    margin-top: .75em;
   }
 }
 
@@ -30,6 +33,8 @@
     // font-style: italic;
     display: block;
     float: right;
+    position: relative;
+    top: 0.3em;
   }
 }
 

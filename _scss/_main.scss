@@ -37,17 +37,17 @@ body {
   padding: 0;
 }
 
-@media (min-width: 38em) {
-  html {
-    font-size: 20px;
-  }
-}
+// @media (min-width: 38em) {
+//   html {
+//     font-size: 20px;
+//   }
+// }
 
 body {
   background: $background;
   font-size: $base-font-size;
   font-family: $serif-font;
-  line-height: 1.75em;
+  line-height: $base-spacing;
   color: $darkGray
 }
 
@@ -119,7 +119,7 @@ dd {
 /* Misc */
 hr {
   position: relative;
-  margin: .5rem 0 1.5rem 0;
+  margin: 1.5rem 0;
   border: 0;
   border-top: 1px solid #eee;
   border-bottom: 1px solid #fff;
@@ -245,7 +245,6 @@ tbody tr:nth-child(odd) th {
  *
  * Extend paragraphs with `.lead` for larger introductory text.
  */
-
 .lead {
   font-size: 1.25rem;
   font-weight: 300;
@@ -258,7 +257,6 @@ tbody tr:nth-child(odd) th {
  * Show alert messages to users. You may add it to single elements like a `<p>`,
  * or to a parent if there are multiple elements to show.
  */
-
 .message {
   margin-bottom: 1rem;
   padding: 1rem;
@@ -267,12 +265,11 @@ tbody tr:nth-child(odd) th {
 }
 
 
-/*
+/**********************************
  * Container
  *
  * Center the page content.
- */
-
+ **********************************/
 .container {
   max-width: 38rem;
   padding-left:  1rem;
@@ -282,11 +279,11 @@ tbody tr:nth-child(odd) th {
 }
 
 
-/*
+/*********************************
  * Masthead
  *
  * Super small header above the content for site name and short description.
- */
+ **********************************/
 
 .masthead {
   padding-top:    1rem;
@@ -306,4 +303,19 @@ tbody tr:nth-child(odd) th {
   font-weight: 400;
   color: #c0c0c0;
   letter-spacing: 0;
+}
+
+
+/*****************************
+ * Home page.
+ *****************************/
+.post-list {
+  list-style: none;
+  padding-left: 0;
+  li {
+    margin-bottom: .5em;
+  }
+  .post-date {
+    float: right;
+  }
 }

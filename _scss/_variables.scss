@@ -22,7 +22,8 @@ $sans-font: "Raleway", sans-serif;
 $serif-font: "Merriweather", serif;
 $code-font: Menlo, Monaco, "Courier New", monospace;
 
-$base-font-size: .8rem;
+$base-font-size: 1rem;
+$base-spacing: 1.7em;
 
 // Mobile breakpoints
 @mixin mobile {
